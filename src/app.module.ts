@@ -10,6 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       rootPath: join(__dirname, '..', 'public'),
     }),
 
+    // Conceccion a la base de datos
     MongooseModule.forRoot(`mongodb://localhost:27017/nest-pokemon`),
 
     PokemonModule,
