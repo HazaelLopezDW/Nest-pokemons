@@ -10,6 +10,7 @@ import { Model } from 'mongoose';
 export class SeedService {
 
   private readonly axios: AxiosInstance = axios;
+  private url: string = `https://pokeapi.co/api/v2/pokemon?limit=650`;
  
   constructor(
     @InjectModel(Pokemon.name)
@@ -18,25 +19,22 @@ export class SeedService {
   
   async executeSeed() {
 
-    this.pokemonModel.deleteMany({}); // delete * from Pokemon
-
+    await this.pokemonModel.deleteMany({}); // delete * from Pokemon
     try {
-      const {data} = await this.axios.get<PokeResponse>(`https://pokeapi.co/api/v2/pokemon?limit=10`);
+      const {data} = await this.axios.get<PokeResponse>(this.url);
 
-      const insertPromisesArray = [];
+      const pokemonToInsert: {name: string, no: number}[] = [];
 
-      data.results.map(({name, url}) => {
+      data.results.forEach(({name, url}) => {
 
         const segments = url.split('/');
         const no: number = +segments[segments.length - 2];
 
         // await this.pokemonModel.create({no, name});
-        insertPromisesArray.push(
-          this.pokemonModel.create({no, name})
-        );
+        pokemonToInsert.push({name, no}); // [{name: bulbasaour, no: 1}]
       });
 
-      await Promise.all(insertPromisesArray);
+      await this.pokemonModel.insertMany(pokemonToInsert);
 
       return 'Seed Executerd';
 
