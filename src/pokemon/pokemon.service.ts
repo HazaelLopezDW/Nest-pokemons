@@ -12,15 +12,15 @@ export class PokemonService {
     return `This action returns all pokemon`;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} pokemon`;
   }
 
-  update(id: number, updatePokemonDto: UpdatePokemonDto) {
+  update(id: string, updatePokemonDto: UpdatePokemonDto) {
     return `This action updates a #${id} pokemon`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} pokemon`;
   }
 }
