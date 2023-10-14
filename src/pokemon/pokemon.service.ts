@@ -1,4 +1,6 @@
-import { Injectable, BadRequestException, InternalServerErrorException, NotFoundException} from '@nestjs/common';
+import { Injectable, 
+         BadRequestException, 
+         InternalServerErrorException, NotFoundException, Query} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
@@ -17,7 +19,6 @@ export class PokemonService {
     createPokemonDto.name = createPokemonDto.name.toLowerCase();
 
     try {
-
       const pokemon = await this.pokemonModel.create(createPokemonDto)
       return pokemon;
 
@@ -28,7 +29,10 @@ export class PokemonService {
   }
 
   findAll() {
-    return `This action returns all pokemon`;
+
+    return this.pokemonModel.find()
+      .limit(5)
+      .skip(5);
   }
 
   async findOne(term: string) {
